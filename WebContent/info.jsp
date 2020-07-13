@@ -5,29 +5,30 @@
 <%@ page import="java.util.*"%>
 
 <%
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-String url = "jdbc:oracle:thin@localhost:1521:orcl";
+String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 String userName = "hr";
 String password = "koreait2020";
+Class.forName("oracle.jdbc.driver.OracleDriver");
+
 Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
 
-String sql = "SELECT * FROM countries;";
+String sql = "SELECT * FROM countries";
 
-List<CountriesVO> list = new ArrayList();
+List<CountriesVO> list = new ArrayList<CountriesVO>();
 
 try {
 	conn = DriverManager.getConnection(url, userName, password);
 	ps = conn.prepareStatement(sql);
 	rs = ps.executeQuery();
-
+	
 	while (rs.next()) {
 		String country_id = rs.getString("country_id");
 		String country_name = rs.getString("country_name");
 		int region_id = rs.getInt("region_id");
-
 		CountriesVO vo = new CountriesVO();
+
 		vo.setCountry_id(country_id);
 		vo.setCountry_name(country_name);
 		vo.setRegion_id(region_id);
