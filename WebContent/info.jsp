@@ -8,11 +8,11 @@
 String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 String userName = "hr";
 String password = "koreait2020";
-Class.forName("oracle.jdbc.driver.OracleDriver");
-
 Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
+
+Class.forName("oracle.jdbc.driver.OracleDriver");
 
 String sql = "SELECT * FROM countries";
 
@@ -62,7 +62,6 @@ try {
 				<th>나라명</th>
 				<th>지역 ID</th>
 			</tr>
-			
 			<%
 				for (CountriesVO vo : list) {
 			%>
