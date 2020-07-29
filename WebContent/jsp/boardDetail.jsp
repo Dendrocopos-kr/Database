@@ -1,8 +1,6 @@
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
-<%@page import="java.sql.Connection"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
-<%@ page import="java.util.*"%>
 <%@ page import="kr.co.dendrocopos.*"%>
 <%!//전역으로 설정
 	private Connection getConn() throws Exception {
@@ -14,16 +12,16 @@
 		Connection Conn = DriverManager.getConnection(url, userName, password);
 		System.out.println("접속성공");
 		return Conn;
-	}%>
-
+	}
+%>
 <%
-	Connection conn = null;
+	String strI_board = request.getParameter("i_board");
+Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
+	T_boardVO board = new T_boardVO();
 
-String sql = " select id_board,title from t_board order by id_board desc";
-
-List<T_boardVO> boardList = new ArrayList<T_boardVO>();
+String sql = " select ID_STUDENT,title,ctnt,r_dt from t_board where ID_BOARD=" + strI_board;
 
 try {
 	conn = getConn();
@@ -31,16 +29,12 @@ try {
 	rs = ps.executeQuery();
 	//select => executeQuery();
 	//그 외는 다른거
-	T_boardVO board;
+	//board.setId_board(rs.getInt("ID_BOARD"));
 	while (rs.next()) {
-		board = new T_boardVO();
-		board.setId_board(rs.getInt("ID_BOARD"));
-		//board.setId_student(rs.getInt("ID_STUDENT"));
-		//board.setR_dt(rs.getString("R_DT"));
+		board.setId_student(rs.getInt("ID_STUDENT"));
+		board.setR_dt(rs.getString("R_DT"));
 		board.setTitle(rs.getNString("TITLE"));
-		//board.setCtnt(rs.getString("CTNT"));
-
-		boardList.add(board);
+		board.setCtnt(rs.getString("CTNT"));
 	}
 
 } catch (Exception e) {
@@ -68,45 +62,50 @@ try {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시판</title>
+<title>Insert title here</title>
 </head>
 <style>
-table {
-	border: black 1px solid;
-	margin: 10px auto;
-	border-collapse: collapse;
+.main_body {
+	width: 800px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
 }
 
-th, td {
-	padding: 1em;
+.ctnt {
 	border: black 1px solid;
-	text-align: center;
+	height: 400px;
 }
 
-div {
-	text-align: center;
+.board_ctnt_title {
+	border: black 1px solid;
+	display: flex;
+}
+.board_ctnt_title div{
+	border: black 1px solid;
+	margin: 20px;
 }
 </style>
 <body>
-	<div>게시판 리스트</div>
-	<table>
-		<tr>
-			<th>번호</th>
-			<th>제목</th>
-		</tr>
-		<%
-			for (T_boardVO vo : boardList) {
-		%>
-		<tr>
-			<td><%=vo.getId_board()%></td>
-			<td>
-				<a href="/jsp/boardDetail.jsp?i_board=<%=vo.getId_board()%>"> <%=vo.getTitle()%>
-				</a>
-			</td>
-		</tr>
-		<%
-			}
-		%>
-	</table>
+	<div class = "main_body">
+		<div class="board_ctnt_title">
+			<div>
+				상세페이지 :
+				<%=strI_board%></div>
+			<div>
+				게시글 번호 :
+				<%=strI_board%></div>
+			<div>
+				제목 :
+				<%=board.getTitle()%></div>
+			<div>
+				작성일 :
+				<%=board.getR_dt()%></div>
+			<div>
+				작성자 :
+				<%=board.getId_student()%></div>
+		</div>
+		<div class="ctnt"><%=board.getCtnt()%></div>
+	</div>
 </body>
 </html>
