@@ -16,44 +16,48 @@
 %>
 <%
 	String strI_board = request.getParameter("i_board");
-Connection conn = null;
-PreparedStatement ps = null;
-ResultSet rs = null;
+	Connection conn = null;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 	T_boardVO board = new T_boardVO();
-
-String sql = " select ID_STUDENT,title,ctnt,r_dt from t_board where ID_BOARD=" + strI_board;
-
-try {
-	conn = getConn();
-	ps = conn.prepareStatement(sql);
-	rs = ps.executeQuery();
-	//select => executeQuery();
-	//그 외는 다른거
-	//board.setId_board(rs.getInt("ID_BOARD"));
-	while (rs.next()) {
-		board.setId_student(rs.getInt("ID_STUDENT"));
-		board.setR_dt(rs.getString("R_DT"));
-		board.setTitle(rs.getNString("TITLE"));
-		board.setCtnt(rs.getString("CTNT"));
-	}
-
-} catch (Exception e) {
-	e.printStackTrace();
-} finally {
-	if (rs != null)
-		try {
-	rs.close();
-		} catch (Exception e) {
+	String name ="";
+	
+	String sql = " select ID_STUDENT,title,ctnt,r_dt from t_board where ID_BOARD=" + strI_board;
+	
+	sql = " SELECT  a.ID_STUDENT , title, ctnt, r_dt, nm FROM t_board a JOIN t_student b ON a.id_student = b.id_student WHERE id_board = "+strI_board;
+	
+	try {
+		conn = getConn();
+		ps = conn.prepareStatement(sql);
+		rs = ps.executeQuery();
+		//select => executeQuery();
+		//그 외는 다른거
+		//board.setId_board(rs.getInt("ID_BOARD"));
+		while (rs.next()) {
+			board.setId_student(rs.getInt("ID_STUDENT"));
+			board.setR_dt(rs.getString("R_DT"));
+			board.setTitle(rs.getNString("TITLE"));
+			board.setCtnt(rs.getString("CTNT"));
+			name = rs.getNString("nm");
 		}
-	if (ps != null)
-		try {
-	ps.close();
-		} catch (Exception e) {
-		}
-	if (conn != null)
-		try {
-	conn.close();
-		} catch (Exception e) {
+	
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (rs != null)
+			try {
+		rs.close();
+			} catch (Exception e) {
+			}
+		if (ps != null)
+			try {
+		ps.close();
+			} catch (Exception e) {
+			}
+		if (conn != null)
+			try {
+		conn.close();
+			} catch (Exception e) {
 		}
 }
 %>
@@ -75,6 +79,7 @@ try {
 .ctnt {
 	border: black 1px solid;
 	height: 400px;
+	padding: 10px;
 }
 
 .board_ctnt_title {
@@ -82,16 +87,17 @@ try {
 	display: flex;
 }
 .board_ctnt_title div{
-	border: black 1px solid;
 	margin: 20px;
 }
 </style>
 <body>
 	<div class = "main_body">
 		<div class="board_ctnt_title">
+		<!-- 
 			<div>
 				상세페이지 :
 				<%=strI_board%></div>
+				 -->
 			<div>
 				게시글 번호 :
 				<%=strI_board%></div>
@@ -103,7 +109,7 @@ try {
 				<%=board.getR_dt()%></div>
 			<div>
 				작성자 :
-				<%=board.getId_student()%></div>
+				<%=name%>%></div>
 		</div>
 		<div class="ctnt"><%=board.getCtnt()%></div>
 	</div>
