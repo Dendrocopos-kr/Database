@@ -4,8 +4,9 @@
 <%@ page import="java.sql.*"%>
 <%@ page import="java.util.*"%>
 
+
 <%
-String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 String userName = "hr";
 String password = "koreait2020";
 Connection conn = null;
@@ -22,7 +23,7 @@ try {
 	conn = DriverManager.getConnection(url, userName, password);
 	ps = conn.prepareStatement(sql);
 	rs = ps.executeQuery();
-	
+
 	while (rs.next()) {
 		String country_id = rs.getString("country_id");
 		String country_name = rs.getString("country_name");
@@ -53,10 +54,29 @@ try {
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+table {
+	margin: 0 auto;
+	border-collapse: collapse;
+	border: 1px black solid
+}
+table caption{
+	font-size: 2em;
+	font-weight: bold;
+}
+
+td, th {
+	border: 1px black solid;
+	text-align: center;
+	padding: 5px;
+}
+</style>
 <body>
-	<div>나라정보</div>
 	<div>
 		<table>
+			<caption>
+				나라정보
+			</caption>
 			<tr>
 				<th>country_id</th>
 				<th>나라명</th>
