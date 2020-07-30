@@ -100,7 +100,7 @@ div {
 		<tr>
 			<td><%=vo.getId_board()%></td>
 			<td>
-				<a href="/jsp/boardDetail.jsp?i_board=<%=vo.getId_board()%>"> <%=vo.getTitle()%>
+				<a href="/jsp/boardDetail.jsp?id_board=<%=vo.getId_board()%>"> <%=vo.getTitle()%>
 				</a>
 			</td>
 		</tr>
