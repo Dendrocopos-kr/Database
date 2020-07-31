@@ -77,6 +77,7 @@ try {
 }
 if(board.getTitle() == null){
 	%>
+	
 <script type="text/javascript">
 alert('없는 페이지입니다.');
 location.href = 'boardlist.jsp';
@@ -90,7 +91,7 @@ location.href = 'boardlist.jsp';
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title><%=board.getTitle()%></title>
 </head>
 <style>
 .main_body {
