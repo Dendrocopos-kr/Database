@@ -1,8 +1,8 @@
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="kr.co.dendrocopos.*"%>
-<%!//전역으로 설정
+    <%!//전역으로 설정
 	private Connection getConn() throws Exception {
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 		String userName = "hr";
@@ -17,18 +17,8 @@
 	Connection conn = null;
 PreparedStatement ps = null;
 ResultSet rs = null;
-String strI_board = request.getParameter("id_board");
-if(strI_board == null){
-	%>
-<script>
-		alert('잘 못 된 접근입니다.');
-		location.href='boardlist.jsp';
-	</script>
-<%
-	return ;
-}
-String name = "";
 int id_board = 0;
+String strI_board = request.getParameter("id_board");
 T_boardVO board = new T_boardVO();
 
 String sql = " select ID_STUDENT,title,ctnt,r_dt from t_board where ID_BOARD=?";
@@ -76,87 +66,29 @@ try {
 		} catch (Exception e) {
 		}
 }
-if(board.getTitle() == null){
-	%>
-	
-<script type="text/javascript">
-alert('없는 페이지입니다.');
-location.href = 'boardlist.jsp';
-</script>
-<%
-	return;
-}
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title><%=board.getTitle()%></title>
+<title>글 수정</title>
 </head>
-<style>
-.main_body {
-	width: 800px;
-	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-}
-
-.ctnt {
-	border: black 1px solid;
-	height: 400px;
-	padding: 10px;
-}
-
-.board_ctnt_title {
-	border: black 1px solid;
-	display: flex;
-	margin-bottom: 30px;
-}
-
-.board_ctnt_title div {
-	margin: 10px;
-}
-</style>
 <body>
-	<div class="main_body">
-		<div class="board_ctnt_title">
-			<!-- 
+<div>
+		<form action="/jsp/boardModProc.jsp" method="post" onsubmit="return chk()">
 			<div>
-				상세페이지 :
-				<%=strI_board%></div>
-				 -->
-			<div>
-				<a href="/jsp/boardlist.jsp">리스트보기</a>
+				<label for="title">제목:</label><input id="title" name="title" value="<%=board.getTitle()%>">
 			</div>
 			<div>
-				<a href="#" onclick="procDel(<%=id_board%>)">삭제</a>
+				<label for="ctnt">내용:</label><textarea id="ctnt" name="ctnt"><%=board.getCtnt()%></textarea>
 			</div>
 			<div>
-				<a href="/jsp/boardMod.jsp?id_board=<%=strI_board%>">수정</a>
+				<label for="id">작성자:</label><input id="name" name="name" value="<%=board.getId_student()%>">
 			</div>
 			<div>
-				게시글 번호 :
-				<%=strI_board%></div>
-			<div>
-				제목 :
-				<%=board.getTitle()%></div>
-			<div>
-				작성일 :
-				<%=board.getR_dt()%></div>
-			<div>
-				작성자 :
-				<%=board.getId_student()%></div>
-		</div>
-		<div class="ctnt"><%=board.getCtnt()%></div>
+				<input type="submit" value="글등록" id="" name="">
+			</div>
+		</form>
 	</div>
-	<script type="text/javascript">
-	function procDel(id_board){
-		var result = confirm('삭제하시겠습니까?');
-		//alert('id_board :'+ id_board)
-		if(result){
-			location.href = '/jsp/boardDel.jsp?id_board='+id_board;
-		}
-	}</script>
 </body>
 </html>
