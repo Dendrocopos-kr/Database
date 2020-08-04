@@ -21,11 +21,35 @@ try{
 <head>
 <meta charset="UTF-8">
 <title>글쓰기</title>
+<style type="text/css">
+form {
+	width: 600px;
+	margin: 30px auto;
+	border: 1px black solid;
+	padding: 10px;
+	text-align: center;
+}
+div{
+	display: flex;
+}
+div label{
+	width: 75px;
+	margin-bottom: 30px;
+}
+div textarea, div input{
+	width: 350px;
+	margin-bottom: 30px;
+}
+div textarea{
+	height: 500px;
+}
+</style>
 </head>
 <body>
-<div><%=msg %></div>
 	<div>
-		<form action="/jsp/boardWriteProc.jsp" method="post" onsubmit="return chk()">
+		<form action="/jsp/boardWriteProc.jsp" method="post" onsubmit="return chk()" id="frm">
+		<h1>새 글 쓰기</h1>
+		<h3><%=msg %></h3>
 			<div>
 				<label for="title">제목:</label><input id="title" name="title">
 			</div>
@@ -36,12 +60,13 @@ try{
 				<label for="id">작성자:</label><input id="name" name="name">
 			</div>
 			<div>
-				<input type="submit" value="글등록" id="" name="">
+				<label for=""></label><input type="submit" value="글등록" id="" name="">
 			</div>
 		</form>
 	</div>
 	<script type="text/javascript">
 		function eleValid(ele,nm){
+			console.log(ele);
 			if(ele.value.length == 0){
 				alert(nm+'을(를) 입력해주세요');
 				ele.focus();
@@ -49,11 +74,11 @@ try{
 			}
 		}
 		function chk(){
-			if(!eleValid(frm.title,'제목')){
+			if(eleValid(frm.title,'제목')){
 				return false;
-			}else if(!eleValid(frm.ctnt,'내용')){
+			}else if(eleValid(frm.ctnt,'내용')){
 				return false;
-			}else if(!eleValid(frm.name,'이름')){
+			}else if(eleValid(frm.name,'이름')){
 				return false;				
 			}
 		}

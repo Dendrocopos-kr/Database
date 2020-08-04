@@ -2,6 +2,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="kr.co.dendrocopos.*"%>
+<%
+	String msg = "";
+String suc = request.getParameter("suc");
+try {
+	if (suc != null) {
+		switch (suc) {
+	case "true" :
+		msg = "수정 되었습니다.";
+		break;
+	case "false" :
+		msg = "DB애러발생";
+		break;
+		}
+	}
+} catch (Exception e) {
+}
+%>
 <%!//전역으로 설정
 	private Connection getConn() throws Exception {
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
@@ -18,14 +35,14 @@
 PreparedStatement ps = null;
 ResultSet rs = null;
 String strI_board = request.getParameter("id_board");
-if(strI_board == null){
-	%>
+if (strI_board == null) {
+%>
 <script>
 		alert('잘 못 된 접근입니다.');
 		location.href='boardlist.jsp';
 	</script>
 <%
-	return ;
+	return;
 }
 String name = "";
 int id_board = 0;
@@ -38,47 +55,47 @@ String sql = " select ID_STUDENT,title,ctnt,r_dt from t_board where ID_BOARD=?";
 //sql = " select ID_STUDENT,title,ctnt,r_dt from t_board where ID_BOARD=?";
 
 try {
-	conn = getConn();
-	id_board = Integer.parseInt(strI_board);
-	ps = conn.prepareStatement(sql);
-	// (?순서 , value)
-	ps.setInt(1, id_board);
-	//ps.setString(1	, String) // (?순서, String)
-	rs = ps.executeQuery();
-	//select => executeQuery();
-	//그 외는 다른거
-	//board.setId_board(rs.getInt("ID_BOARD"));
-	while (rs.next()) {
-		board.setId_student(rs.getInt("ID_STUDENT"));
-		board.setR_dt(rs.getNString("R_DT"));
-		board.setTitle(rs.getNString("TITLE"));
-		board.setCtnt(rs.getNString("CTNT"));
-		//board.setId_student(rs.getInt("id_student"));
-		//name = rs.getNString("nm");
-	}
+conn = getConn();
+id_board = Integer.parseInt(strI_board);
+ps = conn.prepareStatement(sql);
+// (?순서 , value)
+ps.setInt(1, id_board);
+//ps.setString(1	, String) // (?순서, String)
+rs = ps.executeQuery();
+//select => executeQuery();
+//그 외는 다른거
+//board.setId_board(rs.getInt("ID_BOARD"));
+while (rs.next()) {
+	board.setId_student(rs.getInt("ID_STUDENT"));
+	board.setR_dt(rs.getNString("R_DT"));
+	board.setTitle(rs.getNString("TITLE"));
+	board.setCtnt(rs.getNString("CTNT"));
+	//board.setId_student(rs.getInt("id_student"));
+	//name = rs.getNString("nm");
+}
 
 } catch (Exception e) {
-	e.printStackTrace();
+e.printStackTrace();
 } finally {
-	if (rs != null)
-		try {
-	rs.close();
-		} catch (Exception e) {
-		}
-	if (ps != null)
-		try {
-	ps.close();
-		} catch (Exception e) {
-		}
-	if (conn != null)
-		try {
-	conn.close();
-		} catch (Exception e) {
-		}
+if (rs != null)
+	try {
+		rs.close();
+	} catch (Exception e) {
+	}
+if (ps != null)
+	try {
+		ps.close();
+	} catch (Exception e) {
+	}
+if (conn != null)
+	try {
+		conn.close();
+	} catch (Exception e) {
+	}
 }
-if(board.getTitle() == null){
-	%>
-	
+if (board.getTitle() == null) {
+%>
+
 <script type="text/javascript">
 alert('없는 페이지입니다.');
 location.href = 'boardlist.jsp';
@@ -99,7 +116,9 @@ location.href = 'boardlist.jsp';
 	width: 800px;
 	margin: 0 auto;
 	display: flex;
-	flex-direction: column;
+}
+.main_body div{
+	margin: 10px;
 }
 
 .ctnt {
@@ -120,12 +139,8 @@ location.href = 'boardlist.jsp';
 </style>
 <body>
 	<div class="main_body">
-		<div class="board_ctnt_title">
-			<!-- 
-			<div>
-				상세페이지 :
-				<%=strI_board%></div>
-				 -->
+		<div>
+			<h3><%=msg%></h3>
 			<div>
 				<a href="/jsp/boardlist.jsp">리스트보기</a>
 			</div>
@@ -135,20 +150,29 @@ location.href = 'boardlist.jsp';
 			<div>
 				<a href="/jsp/boardMod.jsp?id_board=<%=strI_board%>">수정</a>
 			</div>
-			<div>
-				게시글 번호 :
-				<%=strI_board%></div>
-			<div>
-				제목 :
-				<%=board.getTitle()%></div>
-			<div>
-				작성일 :
-				<%=board.getR_dt()%></div>
-			<div>
-				작성자 :
-				<%=board.getId_student()%></div>
 		</div>
-		<div class="ctnt"><%=board.getCtnt()%></div>
+		<div>
+			<div class="board_ctnt_title">
+				<!-- 
+			<div>
+				상세페이지 :
+				<%=strI_board%></div>
+				 -->
+				<div>
+					게시글 번호 :
+					<%=strI_board%></div>
+				<div>
+					제목 :
+					<%=board.getTitle()%></div>
+				<div>
+					작성일 :
+					<%=board.getR_dt()%></div>
+				<div>
+					작성자 :
+					<%=board.getId_student()%></div>
+			</div>
+			<div class="ctnt"><%=board.getCtnt()%></div>
+		</div>
 	</div>
 	<script type="text/javascript">
 	function procDel(id_board){
