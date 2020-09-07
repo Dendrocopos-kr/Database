@@ -55,10 +55,8 @@ try {
 	//select => executeQuery();
 	//그 외는 다른거
 	//board.setId_board(rs.getInt("ID_BOARD"));
-	
-} catch (Exception e) {
-	e.printStackTrace();
-} finally {
+}catch(Exception e){
+}finally{
 	if(rs != null){
 		try{
 			rs.close();
